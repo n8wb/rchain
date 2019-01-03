@@ -36,7 +36,7 @@ class Runtime private (
     val replayReducer: ChargingReducer[Task],
     val space: RhoISpace[Task],
     val replaySpace: RhoReplayISpace[Task],
-    val errorLog: ErrorLog,
+    val errorLog: ErrorLog[Task],
     val context: RhoContext,
     val shortLeashParams: Runtime.ShortLeashParams[Task],
     val blockTime: Runtime.BlockTime[Task]
@@ -297,7 +297,7 @@ object Runtime {
   )(
       implicit scheduler: Scheduler
   ): Runtime = {
-    val errorLog                                  = new ErrorLog()
+    val errorLog                                  = new ErrorLog[Task]()
     implicit val ft: FunctorTell[Task, Throwable] = errorLog
 
     def dispatchTableCreator(
